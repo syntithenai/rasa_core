@@ -10,16 +10,23 @@ from typing import Text, Optional, List
 
 from rasa_core.actions import Action
 from rasa_core import utils
+from inspect import isfunction
 
 logger = logging.getLogger(__name__)
 
 
 def action_factory_by_name(name):
-    if name == "local" or name is None:  # this is the default factory
+    # first up try to 
+    print('############################')
+    print("AF {} {} {}".format(name,callable(name),name in globals()))
+    return local_action_factory
+    if callable(name):
+        return name
+    elif name == "local" or name is None:  # this is the default factory
         return local_action_factory
     elif name == "remote":
         return remote_action_factory
-    else:
+    else: 
         raise Exception("Unknown executor name '{}'.".format(name))
 
 
